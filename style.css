@@ -1,0 +1,65 @@
+:root {
+  --bg: #0f172a;
+  --primary: #22c55e;
+  --secondary: #1e293b;
+  --text: #f1f5f9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.app {
+  background: var(--secondary);
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  width: 320px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.timer {
+  font-size: 48px;
+  margin: 20px 0;
+}
+
+.controls button,
+.modes button {
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--primary);
+  color: black;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.stats {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.stats h2 {
+  margin-bottom: 10px;
+}
