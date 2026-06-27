@@ -3,6 +3,7 @@ const startBtn = document.getElementById("start");
 const pauseBtn = document.getElementById("pause");
 const resetBtn = document.getElementById("reset");
 const modeButtons = document.querySelectorAll(".modes button");
+const themeToggle = document.getElementById("themeToggle");
 
 const todayEl = document.getElementById("today");
 const totalEl = document.getElementById("total");
@@ -11,6 +12,7 @@ let timer;
 let timeLeft = 1500;
 let currentMode = "work";
 let running = false;
+let chart;
 
 const modes = {
   work: 1500,
@@ -18,17 +20,36 @@ const modes = {
   long: 900
 };
 
-//  som simples
+// THEME
+function loadTheme() {
+  const saved = localStorage.getItem("theme");
+
+  if (saved) {
+    document.body.classList.toggle("light", saved === "light");
+  } else {
+    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+    document.body.classList.toggle("light", prefersLight);
+  }
+}
+
+themeToggle.onclick = () => {
+  document.body.classList.toggle("light");
+  const isLight = document.body.classList.contains("light");
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+};
+
+// SOUND
 function playSound() {
   const audio = new Audio("https://www.soundjay.com/buttons/beep-07.wav");
   audio.play();
 }
 
-//  carregar stats
+// STATS
 function loadStats() {
-  const data = JSON.parse(localStorage.getItem("pomodoroStats")) || {
+  let data = JSON.parse(localStorage.getItem("pomodoroStats")) || {
     today: 0,
     total: 0,
+    history: {},
     lastDate: new Date().toDateString()
   };
 
@@ -45,20 +66,42 @@ function loadStats() {
   return data;
 }
 
-//  salvar stats
 function saveStats(data) {
   localStorage.setItem("pomodoroStats", JSON.stringify(data));
 }
 
-// ⏱ atualizar tela
-function updateDisplay() {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  timeDisplay.textContent =
-    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+// CHART
+function renderChart() {
+  const data = loadStats();
+
+  const labels = Object.keys(data.history).slice(-7);
+  const values = labels.map(d => data.history[d]);
+
+  const ctx = document.getElementById("chart");
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: "Sessões",
+        data: values
+      }]
+    }
+  });
 }
 
-//  iniciar
+// DISPLAY
+function updateDisplay() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  timeDisplay.textContent =
+    `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+// START
 function startTimer() {
   if (running) return;
   running = true;
@@ -74,22 +117,27 @@ function startTimer() {
 
       if (currentMode === "work") {
         let stats = loadStats();
+        const todayKey = new Date().toLocaleDateString();
+
         stats.today++;
         stats.total++;
+        stats.history[todayKey] = (stats.history[todayKey] || 0) + 1;
+
         saveStats(stats);
         loadStats();
+        renderChart();
       }
     }
   }, 1000);
 }
 
-// ⏸ pausar
+// PAUSE
 function pauseTimer() {
   clearInterval(timer);
   running = false;
 }
 
-//  resetar
+// RESET
 function resetTimer() {
   clearInterval(timer);
   running = false;
@@ -97,21 +145,22 @@ function resetTimer() {
   updateDisplay();
 }
 
-//  mudar modo
+// MODE SWITCH
 modeButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.onclick = () => {
     currentMode = btn.dataset.mode;
     timeLeft = modes[currentMode];
     updateDisplay();
     pauseTimer();
-  });
+  };
 });
 
-// eventos
+// INIT
+loadTheme();
+loadStats();
+renderChart();
+updateDisplay();
+
 startBtn.onclick = startTimer;
 pauseBtn.onclick = pauseTimer;
 resetBtn.onclick = resetTimer;
-
-// init
-loadStats();
-updateDisplay();
