@@ -1,36 +1,38 @@
 :root {
   --bg: #0f172a;
-  --primary: #22c55e;
-  --secondary: #1e293b;
+  --card: #1e293b;
   --text: #f1f5f9;
+  --primary: #22c55e;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
+.light {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #0f172a;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
+  transition: 0.3s;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  font-family: sans-serif;
 }
 
 .app {
-  background: var(--secondary);
+  background: var(--card);
   padding: 30px;
   border-radius: 16px;
+  width: 340px;
   text-align: center;
-  width: 320px;
 }
 
-h1 {
-  margin-bottom: 20px;
+#themeToggle {
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .timer {
@@ -38,28 +40,15 @@ h1 {
   margin: 20px 0;
 }
 
-.controls button,
-.modes button {
+button {
   margin: 5px;
-  padding: 10px 15px;
-  border: none;
+  padding: 10px;
   border-radius: 8px;
+  border: none;
   cursor: pointer;
   background: var(--primary);
-  color: black;
-  font-weight: bold;
-  transition: 0.2s;
 }
 
-button:hover {
-  opacity: 0.8;
-}
-
-.stats {
+canvas {
   margin-top: 20px;
-  text-align: left;
-}
-
-.stats h2 {
-  margin-bottom: 10px;
 }
