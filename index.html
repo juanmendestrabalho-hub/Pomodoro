@@ -3,38 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FocusFlow - Pomodoro</title>
+  <title>FocusFlow</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <div class="app">
-    <h1> FocusFlow</h1>
+<div class="app">
+  <h1> FocusFlow</h1>
 
-    <div class="timer">
-      <span id="time">25:00</span>
-    </div>
+  <button id="themeToggle">🌙 / ☀️</button>
 
-    <div class="controls">
-      <button id="start">Start</button>
-      <button id="pause">Pause</button>
-      <button id="reset">Reset</button>
-    </div>
-
-    <div class="modes">
-      <button data-mode="work">Trabalho</button>
-      <button data-mode="short">Pausa Curta</button>
-      <button data-mode="long">Pausa Longa</button>
-    </div>
-
-    <div class="stats">
-      <h2> Estatísticas</h2>
-      <p>Hoje: <span id="today">0</span> sessões</p>
-      <p>Total: <span id="total">0</span> sessões</p>
-    </div>
-
+  <div class="timer">
+    <span id="time">25:00</span>
   </div>
 
-</body>
+  <div class="controls">
+    <button id="start">Start</button>
+    <button id="pause">Pause</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <div class="modes">
+    <button data-mode="work">Trabalho</button>
+    <button data-mode="short">Pausa Curta</button>
+    <button data-mode="long">Pausa Longa</button>
+  </div>
+
+  <div class="stats">
+    <h2> Estatísticas</h2>
+    <p>Hoje: <span id="today">0</span></p>
+    <p>Total: <span id="total">0</span></p>
+  </div>
+
+  <canvas id="chart"></canvas>
+
+</div>
+
 <script src="script.js"></script>
+</body>
 </html>
